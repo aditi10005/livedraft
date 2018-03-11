@@ -20,11 +20,10 @@
       <button class="small_btn" onclick="tryJoining()" id="join_btn" >JOIN</button>
     </div>
     <div id="container">
-      <textarea id="main_writer" class="medium_font"></textarea>
+      <textarea id="main_writer" class="medium_font" placeholder="Start typing..."></textarea>
     </div>
 
     <script>
-      // You can also require other files to run in this process
       require('./renderer.js')
       var channel = Math.floor(Math.random() * 20)+"-"+Math.floor(Math.random() * 1000)+"-"+Math.floor(Math.random() * 100);
       var body = $("#main_writer").val();
@@ -36,11 +35,21 @@
         publish();
         //alert(uid);
       }
+      
+      function tryJoining() {
+        $("#main_writer").val("");
+        sharing = true;
+        //fetch data from other peer's working copy
+        //updatie the copy
+        
+      }
+
 
       $("#main_writer").keyup(function() {
           body = $("#main_writer").val();
           if (publish == true) {
             //keep publishing
+
           }
       });
 
