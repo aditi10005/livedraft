@@ -1,0 +1,119 @@
+@font-face {
+    font-family: Rammet;
+    src: url('../fonts/RammettoOne-Regular.ttf');
+}
+@font-face {
+    font-family: Mina;
+    src: url('../fonts/Mina-Regular.ttf');
+} 
+@font-face {
+    font-family: Rozha;
+    src: url('../fonts/RozhaOne-Regular.ttf');
+}
+
+body {
+    padding: 0px;
+    margin: 0px;
+}
+
+::selection {
+    background: #e71868; /* WebKit/Blink Browsers */
+    color: #FFF;
+}
+
+#header {
+    width:10%;
+    top:0px;
+    height: 50px;
+    position: fixed;
+    padding: 20px;
+    z-index: 100;
+}
+
+#sidemenu {
+    width:10%;
+    top:80px;
+    height: 100%;
+    position: fixed;
+    
+    z-index: 100;
+    padding: 20px;
+}
+
+#container {
+    width:100%;
+    top:20px;
+    height: 100%;
+    background: #fff;
+    position: absolute;
+    z-index: 20;
+}
+
+#writer {
+    width:100%;
+    top:0px;
+    left: 0px;
+    height: 100%;
+    background: #fff; 
+    
+}
+
+#main_writer {
+    width:60%;
+    margin-left: 20%;
+    margin-right: 20%;
+    top:0px;
+    left: 0px;
+    height: 100%;
+    border: none;
+    font-family: Mina;
+    overflow: auto;
+    outline: none;
+
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
+.small_font {
+    font-size: 15px;
+    caret-color: red;
+}
+
+.medium_font {
+    font-size: 25px;
+    caret-color: red;
+}
+
+.large_font {
+    font-size: 35px;
+    caret-color: red;
+}
+
+.white {
+    color: #000;
+}
+
+.small_btn {
+    font-size: 10px;  
+}
+
+#share_btn {
+    background: #e71868;
+    border: #e71868;
+    outline: #e71868;
+}
+
+#join_btn {
+    background: none;
+    border: none;
+    outline: none;
+}
+
+#title {
+    color: hsl(0, 0%, 9%);
+    font-size: 25px;
+    font-family: Mina;
+    position: relative;
+    margin-top: 10px;
+}
