@@ -6,10 +6,11 @@
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/skeleton.css">
     <link rel="stylesheet" href="css/style.css">
-  
+    <link rel="stylesheet" href="node_modules/tingle.js/src/tingle.css">
+
+    <script src="node_modules/tingle.js/src/tingle.js"></script>
     <script type="text/javascript" src="js/jquery.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-
     <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.20.2.js"></script>
 
   </head>
@@ -23,6 +24,7 @@
       <textarea id="main_writer" class="medium_font" placeholder="Start typing..."></textarea>
     </div>
 
+    <script type="text/javascript" src="js/prompt.js"></script>
     <script>
       require('./renderer.js')
       var channel = Math.floor(Math.random() * 20)+"-"+Math.floor(Math.random() * 1000)+"-"+Math.floor(Math.random() * 100);
@@ -39,8 +41,9 @@
       function tryJoining() {
         $("#main_writer").val("");
         sharing = true;
+        modal.open();
         //fetch data from other peer's working copy
-        //updatie the copy
+        //update the copy
         
       }
 
