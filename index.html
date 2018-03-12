@@ -33,13 +33,13 @@
     <script type="text/javascript" src="js/shareModal.js"></script>
     <script>
       require('./renderer.js')
-      var channel = Math.floor(Math.random() * 20)+"-"+Math.floor(Math.random() * 1000)+"-"+Math.floor(Math.random() * 100);
+      var channel = Math.floor(Math.random() * 20)+"-"+Math.floor(Math.random() * 1000)+"-"+Math.floor(Math.random() * 100)+"-"+Math.floor(Math.random() * 10000);
       var body = $("#main_writer").val();
       var sharing = false;
       var typing = false;
       var name = "";
       var cursorPosition = 0;
-      var userId = 1;
+      var userId = Math.floor(Math.random() * 10000)+"-"+Math.floor(Math.random() * 10000);
       var pubnub = new PubNub({
           publishKey : 'pub-c-4c8b4681-1768-4bd1-b251-964e22884f07',
           subscribeKey : 'sub-c-d487f296-2515-11e8-9bf4-060db84035e6'
