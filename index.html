@@ -19,13 +19,17 @@
     <div id="sidemenu">
       <button class="button-primary small_btn color_red" id="share_btn" onclick="startSharing()" >SHARE</button>
       <button class="small_btn" onclick="tryJoining()" id="join_btn" >JOIN</button>
+      <div id="users_list">
+          <p> ONLINE</p>
+      </div>
     </div>
     <input id="cursor" style="display:none"></input>
     <div id="container">
       <textarea id="main_writer" class="medium_font" placeholder="Start typing..."></textarea>
     </div>
 
-    <script type="text/javascript" src="js/prompt.js"></script>
+    <script type="text/javascript" src="js/joinModal.js"></script>
+    <script type="text/javascript" src="js/shareModal.js"></script>
     <script>
       require('./renderer.js')
       var channel = "11-884-34";//Math.floor(Math.random() * 20)+"-"+Math.floor(Math.random() * 1000)+"-"+Math.floor(Math.random() * 100);
