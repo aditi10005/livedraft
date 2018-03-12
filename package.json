@@ -1,12 +1,12 @@
 {
-  "name": "electron-quick-start",
+  "name": "liveDraft",
   "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "description": "Real-time collaborative MD editor",
   "main": "main.js",
   "scripts": {
     "start": "electron ."
   },
-  "repository": "https://github.com/electron/electron-quick-start",
+  "repository": "",
   "keywords": [
     "Electron",
     "quick",
@@ -20,6 +20,7 @@
     "electron": "~1.8.2"
   },
   "dependencies": {
+    "electron-packager": "^11.1.0",
     "tingle.js": "^0.13.2"
   }
 }

@@ -145,9 +145,14 @@ input {
     outline: none;
 }
 
+#logo {
+    left: 0px;
+    position: fixed;
+}
+
 #title {
     color: hsl(0, 0%, 9%);
-    font-size: 25px;
+    font-size: 20px;
     font-family: Mina;
     position: relative;
     margin-top: 10px;
