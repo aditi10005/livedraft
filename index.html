@@ -20,6 +20,7 @@
       <button class="button-primary small_btn color_red" id="share_btn" onclick="startSharing()" >SHARE</button>
       <button class="small_btn" onclick="tryJoining()" id="join_btn" >JOIN</button>
     </div>
+    <input id="cursor" style="display:none"></input>
     <div id="container">
       <textarea id="main_writer" class="medium_font" placeholder="Start typing..."></textarea>
     </div>
@@ -31,6 +32,7 @@
       var body = $("#main_writer").val();
       var sharing = false;
       var name = "AL";
+      var cursorPosition = 0;
       var userId = 1;
       var pubnub = new PubNub({
           publishKey : 'pub-c-4c8b4681-1768-4bd1-b251-964e22884f07',
@@ -60,18 +62,24 @@
 
       $("#main_writer").keyup(function() {
           body = $("#main_writer").val();
+          var cursorPosition = $('#main_writer').prop("selectionStart");
+          console.log("TYPING AT "+ cursorPosition);
+          $("#main_writer")[0].setSelectionRange(cursorPosition, cursorPosition);
+          $("#cursor").val(cursorPosition);
           if (sharing == true) {
             //keep publishing
-            publishSampleMessage();
+            publishMessage();
           }
       });
 
-      function publishSampleMessage() {
+      function publishMessage() {
             body = $("#main_writer").val();
             message.type = "doc_sharing";
             message.id = userId;
             message.name = name;
             message.body = body;
+            message.len = body.length;
+            message.cur = $("#cursor").val(cursorPosition);
             var publishConfig = {
                 channel : channel,
                 message : message
@@ -100,7 +108,7 @@
         pubnub.addListener({
             status: function(statusEvent) {
                 if (statusEvent.category === "PNConnectedCategory") {
-                    publishSampleMessage();
+                    publishMessage();
                 }
             },
             message: function(message) {
@@ -108,13 +116,25 @@
                     console.log("New Message!!", message.message);
                 } 
                 else {
+
                     var type = message.message.type;
                     if (type == "fetch_doc") {
-                        publishSampleMessage();
+                        publishMessage();
                     }
                     else if (type == "doc_sharing"){
                         //update the body
-                        console.log("UPDATING TEXT");
+                        var cur = message.message.cur;
+                        var len = message.message.len;
+                        cursorPosition = $("#cursor").val();
+                        var currBody = $("#main_writer").val();
+                        if (cur <= (currBody.length - cursorPosition)) {
+                            //other user typed above the current user's text
+                            var offset = (currBody.length - cursorPosition) - (len - curr);
+                            $("#main_writer")[0].setSelectionRange($("#cursor").val(), $("#cursor").val());
+                        }
+                        else {
+                            $("#main_writer")[0].setSelectionRange($("#cursor").val(), $("#cursor").val());
+                        }
                         $("#main_writer").val(message.message.body);
                     }
                 }
