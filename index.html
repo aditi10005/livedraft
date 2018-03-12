@@ -45,6 +45,7 @@
         message.id = userId;
         message.name = name;
         publish();
+        //hide share button
       }
       
       function tryJoining() {
@@ -52,49 +53,75 @@
         sharing = true;
         modal.open();
         //fetch data from other peer's working copy
+
         //update the copy
         
       }
 
       $("#main_writer").keyup(function() {
           body = $("#main_writer").val();
-          if (publish == true) {
+          if (sharing == true) {
             //keep publishing
-
+            publishSampleMessage();
           }
       });
-      
-      //-----Publish
-      function publish() {
-        sharing = true;
-        
-        function publishSampleMessage() {
+
+      function publishSampleMessage() {
+            var publishConfig = {
+                channel : channel,
+                message : message
+            }
+            console.log(channel);
+            pubnub.publish(publishConfig, function(status, response) {
+                console.log(status, response);
+      })}
+
+      function fetchCopy() {
+            body = $("#main_writer").val();
+            message.type = "fetch_doc";
+            message.id = userId;
+            message.name = name;
             var publishConfig = {
                 channel : channel,
                 message : message
             }
             pubnub.publish(publishConfig, function(status, response) {
                 console.log(status, response);
-            })}
-        
-            pubnub.addListener({
-                status: function(statusEvent) {
-                    if (statusEvent.category === "PNConnectedCategory") {
+      })}
+      
+      //-----Setup Publishing
+      function publish() {
+        sharing = true;
+        pubnub.addListener({
+            status: function(statusEvent) {
+                if (statusEvent.category === "PNConnectedCategory") {
+                    publishSampleMessage();
+                }
+            },
+            message: function(message) {
+                if (message.id == userId) {
+                    console.log("New Message!!", message);
+                } 
+                else {
+                    var type = message.type;
+                    if (type === "fetch_doc") {
                         publishSampleMessage();
                     }
-                },
-                message: function(message) {
-                    console.log("New Message!!", message);
-                },
-                presence: function(presenceEvent) {
-                    // handle presence
+                    else {
+                        //update the body
+                        $("#main_writer").val(message.body);
+                    }
                 }
-            })      
-            console.log("Subscribing..");
-            pubnub.subscribe({
-                channels: [channel] 
-            });
-        };
+            },
+            presence: function(presenceEvent) {
+                // handle presence
+            }
+        })      
+        console.log("Subscribing..");
+        pubnub.subscribe({
+            channels: [channel] 
+        });
+      };
     </script>
   </body>
 </html>
