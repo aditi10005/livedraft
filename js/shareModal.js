@@ -19,12 +19,11 @@ var shareModal = new tingle.modal({
 });
 
 // set content
-shareModal.setContent('<h3>Joining a liveDraft</h3>');
 
 // add a button
 shareModal.addFooterBtn('Join', 'tingle-btn tingle-btn--primary', function() {
     // here goes some logic
-    shareModal.close();
+    share();
 });
 
 // add another button

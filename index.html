@@ -19,8 +19,9 @@
     <div id="sidemenu">
       <button class="button-primary small_btn color_red" id="share_btn" onclick="startSharing()" >SHARE</button>
       <button class="small_btn" onclick="tryJoining()" id="join_btn" >JOIN</button>
+      <p id="disconnect_text">Ctrl+R to disconnect</p>
       <div id="users_list">
-          <p> ONLINE</p>
+          <p></p>
       </div>
     </div>
     <input id="cursor" style="display:none"></input>
@@ -32,31 +33,28 @@
     <script type="text/javascript" src="js/shareModal.js"></script>
     <script>
       require('./renderer.js')
-      var channel = "11-884-34";//Math.floor(Math.random() * 20)+"-"+Math.floor(Math.random() * 1000)+"-"+Math.floor(Math.random() * 100);
+      var channel = Math.floor(Math.random() * 20)+"-"+Math.floor(Math.random() * 1000)+"-"+Math.floor(Math.random() * 100);
       var body = $("#main_writer").val();
       var sharing = false;
       var typing = false;
-      var name = "AL";
+      var name = "";
       var cursorPosition = 0;
       var userId = 1;
       var pubnub = new PubNub({
           publishKey : 'pub-c-4c8b4681-1768-4bd1-b251-964e22884f07',
           subscribeKey : 'sub-c-d487f296-2515-11e8-9bf4-060db84035e6'
       })
-      var message = {}
+      var message = {};
+      var users = [name];
     
       function startSharing() {
         body = $("#main_writer").val();
-        message.body = body;
-        message.type = "doc_sharing";
-        message.id = userId;
-        message.name = name;
-        connect();
-        //hide share button
+        shareModal.setContent('<h5>Share your liveDraft</h5><input id="share_name" placeholder="What is your name/identifier"/><br><br><p>Copy and share the following code with people to collaborate on your document</p><p id="channel_name">'+channel+'</p>');
+        shareModal.open();
+
       }
       
       function tryJoining() {
-        $("#main_writer").val("");
         sharing = true;
         modal.open();
       }
@@ -95,15 +93,41 @@
       })}
 
       function join() {
+          sharing = true;
           channel = $("#join_code").val();
           name = $("#join_name").val();
-          connect();
-          //fetch data from other peer's working copy
-          fetchCopy();
+          if (name.length > 0 && channel.length > 0) {
+            connect();
+            //fetch data from other peer's working copy
+            fetchCopy();
+            $("#share_btn").hide();
+            $("#join_btn").hide();
+            modal.close();
+          }
       }
 
       function share() {
+          sharing = true;
           name = $("#share_name").val();
+          if (name.length > 0) {
+            $("#share_btn").hide();
+            $("#join_btn").hide();
+            connect();
+            shareModal.close();
+            if (users.indexOf(name) == -1) {
+                users.push(name);
+            }
+            update_editors();
+          }
+      }
+
+      function update_editors() {
+          $("#disconnect_text").show();
+          var list = "";
+          for (var k in users) {
+              list += ("&#9997; "+users[k]+"<br>");
+          }
+          $("#users_list").html(list);
       }
 
       function fetchCopy() {
@@ -125,20 +149,28 @@
         pubnub.addListener({
             status: function(statusEvent) {
                 if (statusEvent.category === "PNConnectedCategory") {
-                    publishMessage();
+                    //publishMessage();
                 }
             },
             message: function(message) {
-                if (typing == false) {
                 if (message.message.id == userId) {
                 } 
                 else {
 
                     var type = message.message.type;
                     if (type == "fetch_doc") {
+                        console.log("Asked to fetch message");
                         publishMessage();
+                        if (users.indexOf(message.message.name) == -1) {
+                            users.push(message.message.name);
+                        }
+                        update_editors();
                     }
-                    else if (type == "doc_sharing"){
+                    else if (type == "doc_sharing" &&  typing == false){
+                        if (users.indexOf(message.message.name) == -1) {
+                            users.push(message.message.name);
+                        }
+                        console.log(message.message);
                         //update the body
                         var cur = message.message.cur;
                         var len = message.message.len;
@@ -158,10 +190,10 @@
                         else {
                             $("#main_writer")[0].setSelectionRange($("#cursor").val(), $("#cursor").val());
                         }
-                        
+                        update_editors();
                     }
                 }
-            }},
+            },
             presence: function(presenceEvent) {
                 // handle presence
             }
