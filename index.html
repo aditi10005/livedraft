@@ -35,6 +35,7 @@
       var channel = "11-884-34";//Math.floor(Math.random() * 20)+"-"+Math.floor(Math.random() * 1000)+"-"+Math.floor(Math.random() * 100);
       var body = $("#main_writer").val();
       var sharing = false;
+      var typing = false;
       var name = "AL";
       var cursorPosition = 0;
       var userId = 1;
@@ -58,14 +59,15 @@
         $("#main_writer").val("");
         sharing = true;
         modal.open();
-        //fetch data from other peer's working copy
-        
-        //update the copy
-        
       }
+
+      $("#main_writer").keydown(function(){
+          typing = true;
+      });
 
       $("#main_writer").keyup(function() {
           body = $("#main_writer").val();
+          typing = false;
           var cursorPosition =  $('#main_writer').prop("selectionStart");
           //$("#main_writer")[0].setSelectionRange(cursorPosition, cursorPosition);
           $("#cursor").val(cursorPosition);
@@ -92,6 +94,18 @@
                 //console.log(status, response);
       })}
 
+      function join() {
+          channel = $("#join_code").val();
+          name = $("#join_name").val();
+          connect();
+          //fetch data from other peer's working copy
+          fetchCopy();
+      }
+
+      function share() {
+          name = $("#share_name").val();
+      }
+
       function fetchCopy() {
             body = $("#main_writer").val();
             message.type = "fetch_doc";
@@ -106,7 +120,7 @@
       })}
       
       //-----Setup Publishing
-      function publish() {
+      function connect() {
         sharing = true;
         pubnub.addListener({
             status: function(statusEvent) {
@@ -115,6 +129,7 @@
                 }
             },
             message: function(message) {
+                if (typing == false) {
                 if (message.message.id == userId) {
                 } 
                 else {
@@ -146,7 +161,7 @@
                         
                     }
                 }
-            },
+            }},
             presence: function(presenceEvent) {
                 // handle presence
             }

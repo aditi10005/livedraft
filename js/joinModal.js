@@ -24,7 +24,7 @@ modal.setContent('<h5>Joining a liveDraft</h5><input id="join_name" placeholder=
 // add a button
 modal.addFooterBtn('Join', 'tingle-btn tingle-btn--primary', function() {
     // here goes some logic
-    modal.close();
+    join();
 });
 
 // add another button
