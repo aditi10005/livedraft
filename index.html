@@ -83,6 +83,18 @@
           }
       }
 
+      function disconnect() {
+        console.log("unsub");
+        sharing = false;
+        console.log(channel);
+        pubnub.unsubscribe({
+            channels: [channel] 
+        });
+        $("#share_btn").show();
+        $("#join_btn").show();
+        $("#disconnect_text").hide();
+      }
+
       $("#main_writer").keydown(function(){
           typing = true;
       });
@@ -169,7 +181,7 @@
                 //console.log(status, response);
       })}
       
-      //-----Setup Publishing
+      //-----Setup Publishing------
       function connect() {
         sharing = true;
         pubnub.addListener({
