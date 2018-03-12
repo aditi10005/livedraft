@@ -62,9 +62,8 @@
 
       $("#main_writer").keyup(function() {
           body = $("#main_writer").val();
-          var cursorPosition = $('#main_writer').prop("selectionStart");
-          console.log("TYPING AT "+ cursorPosition);
-          $("#main_writer")[0].setSelectionRange(cursorPosition, cursorPosition);
+          var cursorPosition =  $('#main_writer').prop("selectionStart");
+          //$("#main_writer")[0].setSelectionRange(cursorPosition, cursorPosition);
           $("#cursor").val(cursorPosition);
           if (sharing == true) {
             //keep publishing
@@ -79,14 +78,14 @@
             message.name = name;
             message.body = body;
             message.len = body.length;
-            message.cur = $("#cursor").val(cursorPosition);
+            message.cur = $("#cursor").val();
             var publishConfig = {
                 channel : channel,
                 message : message
             }
-            console.log(channel);
+            //console.log(channel);
             pubnub.publish(publishConfig, function(status, response) {
-                console.log(status, response);
+                //console.log(status, response);
       })}
 
       function fetchCopy() {
@@ -99,7 +98,7 @@
                 message : message
             }
             pubnub.publish(publishConfig, function(status, response) {
-                console.log(status, response);
+                //console.log(status, response);
       })}
       
       //-----Setup Publishing
@@ -113,7 +112,6 @@
             },
             message: function(message) {
                 if (message.message.id == userId) {
-                    console.log("New Message!!", message.message);
                 } 
                 else {
 
@@ -125,17 +123,23 @@
                         //update the body
                         var cur = message.message.cur;
                         var len = message.message.len;
-                        cursorPosition = $("#cursor").val();
+                        cursorPosition = parseInt($("#cursor").val());
                         var currBody = $("#main_writer").val();
-                        if (cur <= (currBody.length - cursorPosition)) {
+                        $("#main_writer").val(message.message.body);
+                        
+                        if (cur <= cursorPosition) {
                             //other user typed above the current user's text
-                            var offset = (currBody.length - cursorPosition) - (len - curr);
-                            $("#main_writer")[0].setSelectionRange($("#cursor").val(), $("#cursor").val());
+                            console.log("in above");
+                            var offset = len - currBody.length;
+                            console.log(len+" "+currBody.length);
+                            console.log(cursorPosition+offset);
+                            $("#main_writer")[0].setSelectionRange(cursorPosition+offset,cursorPosition+offset);
+                            $("#cursor").val(cursorPosition+offset);
                         }
                         else {
                             $("#main_writer")[0].setSelectionRange($("#cursor").val(), $("#cursor").val());
                         }
-                        $("#main_writer").val(message.message.body);
+                        
                     }
                 }
             },
