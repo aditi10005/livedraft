@@ -110,6 +110,23 @@ input {
     box-shadow: none;
 }
 
+#preview {
+    width:60%;
+    margin-left: 20%;
+    margin-right: 20%;
+    top:0px;
+    left: 0px;
+    height: 100%;
+    border: none;
+    font-family: Mina;
+    overflow: auto;
+    outline: none;
+    display: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
 .small_font {
     font-size: 15px;
     caret-color: red;
@@ -139,11 +156,7 @@ input {
     outline: #e71868;
 }
 
-#join_btn {
-    background: none;
-    border: none;
-    outline: none;
-}
+
 
 #logo {
     left: 0px;

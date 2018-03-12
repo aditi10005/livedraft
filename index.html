@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="node_modules/tingle.js/src/tingle.css">
 
     <script src="node_modules/tingle.js/src/tingle.js"></script>
+    <script type="text/javascript" src="node_modules/markdown/lib/markdown.js"></script>
     <script type="text/javascript" src="js/jquery.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.20.2.js"></script>
@@ -17,9 +18,11 @@
   <body>
     <div id="header"><img src="assets/liveDraft.png" id="logo" width="25"/><span id="title">liveDraft</span></div>
     <div id="sidemenu">
-      <button class="button-primary small_btn color_red" id="share_btn" onclick="startSharing()" >SHARE</button>
-      <button class="small_btn" onclick="tryJoining()" id="join_btn" >JOIN</button>
-      <p id="disconnect_text">Ctrl+R to disconnect</p>
+      <button class="small_btn" id="prev_btn" onclick="preview()">Preview</p>
+      <button class="button-primary small_btn color_red" id="share_btn" onclick="startSharing()" >Share</button>
+      <button class="small_btn" onclick="tryJoining()" id="join_btn" >Join</button>
+      <button class="small_btn" id="disconnect_text" onclick="disconnect()">Disconnect</p>
+      
       <div id="users_list">
           <p></p>
       </div>
@@ -27,6 +30,7 @@
     <input id="cursor" style="display:none"></input>
     <div id="container">
       <textarea id="main_writer" class="medium_font" placeholder="Start typing..."></textarea>
+      <div id="preview" class="medium_font"></div>
     </div>
 
     <script type="text/javascript" src="js/joinModal.js"></script>
@@ -37,6 +41,7 @@
       var body = $("#main_writer").val();
       var sharing = false;
       var typing = false;
+      var html_on = false;
       var name = "";
       var cursorPosition = 0;
       var userId = Math.floor(Math.random() * 10000)+"-"+Math.floor(Math.random() * 10000);
@@ -57,6 +62,25 @@
       function tryJoining() {
         sharing = true;
         modal.open();
+      }
+
+      function preview() {
+          if (html_on == false) {
+            $("#prev_btn").text("Edit");
+            html_on = true;
+            $("#preview").show();
+            $("#main_writer").hide();
+            body = $("#main_writer").val();
+            html_content = markdown.toHTML( body );
+            $("#preview").html(html_content);
+          }
+          else {
+            $("#prev_btn").text("Preview");
+            html_on = false;
+            $("#preview").hide();
+            $("#main_writer").show();
+            $("#preview").html("");
+          }
       }
 
       $("#main_writer").keydown(function(){

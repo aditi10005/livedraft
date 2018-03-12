@@ -19,7 +19,7 @@ var modal = new tingle.modal({
 });
 
 // set content
-modal.setContent('<h5>Joining a liveDraft</h5><input id="join_name" placeholder="What is your name/identifier"/><br><br><input id="join_code" placeholder="What is the join code"/>');
+modal.setContent('<h5>Joining a liveDraft</h5><input id="join_name" placeholder="What is your name/identifier"/><br><br><input id="join_code" placeholder="What is the join-code"/>');
 
 // add a button
 modal.addFooterBtn('Join', 'tingle-btn tingle-btn--primary', function() {
