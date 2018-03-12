@@ -21,7 +21,7 @@ var shareModal = new tingle.modal({
 // set content
 
 // add a button
-shareModal.addFooterBtn('Join', 'tingle-btn tingle-btn--primary', function() {
+shareModal.addFooterBtn('Share', 'tingle-btn tingle-btn--primary', function() {
     // here goes some logic
     share();
 });

@@ -125,7 +125,9 @@
           $("#disconnect_text").show();
           var list = "";
           for (var k in users) {
-              list += ("&#9997; "+users[k]+"<br>");
+              if (users[k].length > 0) {
+                list += ("&#9997; "+users[k]+"<br>");
+              }
           }
           $("#users_list").html(list);
       }
