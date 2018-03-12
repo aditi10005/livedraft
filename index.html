@@ -30,12 +30,21 @@
       var channel = Math.floor(Math.random() * 20)+"-"+Math.floor(Math.random() * 1000)+"-"+Math.floor(Math.random() * 100);
       var body = $("#main_writer").val();
       var sharing = false;
-
+      var name = "A lal";
+      var userId = 1;
+      var pubnub = new PubNub({
+          publishKey : 'pub-c-4c8b4681-1768-4bd1-b251-964e22884f07',
+          subscribeKey : 'sub-c-d487f296-2515-11e8-9bf4-060db84035e6'
+      })
+      var message = {}
+    
       function startSharing() {
         body = $("#main_writer").val();
-        console.log(body);
+        message.body = body;
+        message.type = "doc_sharing";
+        message.id = userId;
+        message.name = name;
         publish();
-        //alert(uid);
       }
       
       function tryJoining() {
@@ -47,7 +56,6 @@
         
       }
 
-
       $("#main_writer").keyup(function() {
           body = $("#main_writer").val();
           if (publish == true) {
@@ -55,42 +63,37 @@
 
           }
       });
-
+      
+      //-----Publish
       function publish() {
-      sharing = true;
-      pubnub = new PubNub({
-          publishKey : 'pub-c-4c8b4681-1768-4bd1-b251-964e22884f07',
-          subscribeKey : 'sub-c-d487f296-2515-11e8-9bf4-060db84035e6'
-      })
-      
-      function publishSampleMessage() {
-          console.log("Since we're publishing on subscribe connectEvent, we're sure we'll receive the following publish.");
-          var publishConfig = {
-              channel : channel,
-              message : "Hello from PubNub Docs!"
-          }
-          pubnub.publish(publishConfig, function(status, response) {
-              console.log(status, response);
-          })
-        }
-      
-        pubnub.addListener({
-            status: function(statusEvent) {
-                if (statusEvent.category === "PNConnectedCategory") {
-                    publishSampleMessage();
-                }
-            },
-            message: function(message) {
-                console.log("New Message!!", message);
-            },
-            presence: function(presenceEvent) {
-                // handle presence
+        sharing = true;
+        
+        function publishSampleMessage() {
+            var publishConfig = {
+                channel : channel,
+                message : message
             }
-        })      
-          console.log("Subscribing..");
-          pubnub.subscribe({
-              channels: [channel] 
-          });
+            pubnub.publish(publishConfig, function(status, response) {
+                console.log(status, response);
+            })}
+        
+            pubnub.addListener({
+                status: function(statusEvent) {
+                    if (statusEvent.category === "PNConnectedCategory") {
+                        publishSampleMessage();
+                    }
+                },
+                message: function(message) {
+                    console.log("New Message!!", message);
+                },
+                presence: function(presenceEvent) {
+                    // handle presence
+                }
+            })      
+            console.log("Subscribing..");
+            pubnub.subscribe({
+                channels: [channel] 
+            });
         };
     </script>
   </body>
